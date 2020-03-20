@@ -1,29 +1,5 @@
-# touhou_video
+bilibili东方tag视频信息管理系统的后端
 
-## Project setup
-```
-npm install
-```
+每周爬取b站东方tag下的所有视频信息, 整理后展示在后台管理界面
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+再进行计分排名后导出至视频脚本生成排行榜视频
