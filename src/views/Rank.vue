@@ -40,7 +40,7 @@
                 </div>
             </div>
         </div>
-        <div class="card text-left mb-3" v-for="(video,index) in videos" :key="index">
+        <div class="card text-left mt-3" v-for="(video,index) in videos" :key="index">
             <div class="row no-gutters">
                 <div class="col-1 align-self-center text-center">
                     <a class="display-4">{{video.rank}}</a>
@@ -86,13 +86,13 @@
 <script>
     import api from '../api.js'
     export default {
-        name: "Rank.vue",
+        name: "Rank",
         data() {
             return {
                 is_authenticated: false,
                 inputAuthenticationPassword: '',
                 authenticationPassword: 'thv',
-                issue: 1,
+                issue: this.newIssue,
                 chooseVideo: 0,
                 startTime: 0,
                 videos:[],

@@ -7,7 +7,7 @@
       </div>
       <div class="col-8">
 <!--        <rank></rank>-->
-        <router-view :to="{ name: 'newRank'}">最新一期</router-view>
+        <router-view :to="{name: 'rank', params: {issue: this.newIssue}}"></router-view>
       </div>
       <div class="col-2 pr-0">
 

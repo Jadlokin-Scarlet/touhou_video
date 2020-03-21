@@ -3,9 +3,10 @@
 import Vue from 'vue';
 import axios from "axios";
 
+Vue.prototype.newIssue = 1;
 // Full config:  https://github.com/axios/axios#request-config
-// axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || 'http://47.100.66.36:8081/api/';
-axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || 'http://localhost:8081/api/';
+axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || 'http://47.100.66.36:8081/api/';
+// axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || 'http://localhost:8081/api/';
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.headers.get['referer'] = 'no-referer';

@@ -6,22 +6,22 @@ Vue.use(Router);
 
 export default new Router({
     routes: [
-    {
-        path: '/rank/:issue',
-        name: 'rank',
-        component: Rank,
-        meta: {
-            referrer: "no-referrer",
-        }
-    },
-    {
-        path: '/',
-        name: 'newRank',
-        component: Rank,
-        meta: {
-            referrer: "no-referrer",
-        }
-    },
+        {
+            path: '/',
+            name: 'newRank',
+            component: Rank,
+            meta: {
+                referrer: "no-referrer",
+            },
+        },
+        {
+            path: '/rank/:issue',
+            name: 'rank',
+            component: Rank,
+            meta: {
+                referrer: "no-referrer",
+            },
+        },
     // {
       // path: '/about',
       // name: 'about',

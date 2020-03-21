@@ -1,13 +1,10 @@
 <template>
     <div class="container-fluid">
-        <nav class="nav flex-column nav-pills">
-<!--            <router-link :to="{ name: 'newRank', params: { issue: 1}}">最新一期</router-link>-->
-            <a class="nav-link active" href="#" @click="jumpToNewRank">最新一期</a>
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">往期</a>
-            <div class="dropdown-menu">
-                <div v-for="(index, value) in intList(0, 1)" :key="index">
-                    <a class="nav-link" href="#" @click="jumpToOldRank(value)">第{{value}}期</a>
-                </div>
+        <nav class="nav nav-pills flex-column">
+            <a class="nav-link" href="#" @click="jumpToNewRank">最新一期</a>
+            <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#docCollapse" role="button" aria-haspopup="true" aria-expanded="false">往期</a>
+            <div id="docCollapse" class="collapse">
+                <a class="nav-link mt-1" href="#" v-for="(index, value) in intList(0, newIssue)" :key="index" @click="jumpToOldRank(value)">第{{value}}期</a>
             </div>
             <a class="nav-link" href="#">设置</a>
         </nav>
@@ -16,7 +13,12 @@
 
 <script>
     export default {
-        name: "Left.vue",
+        name: "Left",
+        data() {
+            return {
+                newIssue: this.newIssue,
+            }
+        },
         methods: {
             jumpToOldRank: function(issue) {
                 this.$router.push({
@@ -28,7 +30,10 @@
             },
             jumpToNewRank: function () {
                 this.$router.push({
-                    name: 'newRank',
+                    name: 'rank',
+                    params: {
+                        issue: this.newIssue,
+                    }
                 });
             },
             intList: function(start, end) {
@@ -44,5 +49,8 @@
 </script>
 
 <style scoped>
-
+    .show>.nav-link {
+        color: #007bff;
+        background-color: #ffffff;
+    }
 </style>
