@@ -2,11 +2,11 @@
 
 import Vue from 'vue';
 import axios from "axios";
+import api from "./api";
 
-Vue.prototype.newIssue = 1;
+Vue.prototype.newIssue = 3;
 // Full config:  https://github.com/axios/axios#request-config
-axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || 'http://47.100.66.36:8081/api/';
-// axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || 'http://localhost:8081/api/';
+axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || api.baseUrl;
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.headers.get['referer'] = 'no-referer';
@@ -59,5 +59,6 @@ Plugin.install = function(Vue) {
 };
 
 Vue.use(Plugin)
+Vue.prototype.api = api;
 
 export default Plugin;

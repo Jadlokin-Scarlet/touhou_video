@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container-fluid">
         <!-- Modal -->
         <div class="modal fade" id="startTimeModal" tabindex="-1" role="dialog" aria-labelledby="startTimeModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -20,27 +20,7 @@
                 </div>
             </div>
         </div>
-        <!-- Modal -->
-        <div class="modal fade" id="authenticationModal" tabindex="-1" role="dialog" aria-labelledby="authenticationModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="authenticationModalLabel">认证</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="text" v-model="inputAuthenticationPassword">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="authenticate">确定</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card text-left mt-3" v-for="(video,index) in videos" :key="index">
+        <div class="card text-left mt-3 col-10" v-for="(video,index) in videos" :key="index">
             <div class="row no-gutters">
                 <div class="col-1 align-self-center text-center">
                     <a class="display-4">{{video.rank}}</a>
@@ -73,25 +53,25 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-1 align-self-center text-center">
+                <div class="col-1 align-self-center text-center" v-show="state.is_authenticated">
                     <button type="button" class="btn btn-outline-primary btn-sm mb-3" @click="openModal(video)" data-toggle="modal" data-target="#startTimeModal">设置选区</button>
                     <br>
-                    <button v-show="is_authenticated" type="button" class="btn btn-outline-danger btn-sm" @click="deleteVideo(video.av)">删除</button>
+                    <button type="button" class="btn btn-outline-danger btn-sm" @click="deleteVideo(video.av)">删除</button>
                 </div>
             </div>
+        </div>
+        <div class="col-2">
+
         </div>
     </div>
 </template>
 
 <script>
-    import api from '../api.js'
+    import api from '../plugins/api.js'
     export default {
         name: "Rank",
         data() {
             return {
-                is_authenticated: false,
-                inputAuthenticationPassword: '',
-                authenticationPassword: 'thv',
                 issue: this.newIssue,
                 chooseVideo: 0,
                 startTime: 0,
@@ -108,7 +88,8 @@
                     tags: ["东方PROJECT", "东方", "全勤挑战", "东方三月精", "凋叶棕", "爆肝"],
                     point: 2,
                     startTime: 0,
-                }
+                },
+                state: this.$store.state
             }
         },
         methods: {
@@ -127,13 +108,6 @@
                 this.chooseVideo = video.av;
                 this.startTime = video.startTime;
             },
-            authenticate: function () {
-                this.is_authenticated = (this.inputAuthenticationPassword === this.authenticationPassword);
-                this.$cookies.set('is_authenticated', this.is_authenticated, '30d');
-                if(this.$cookies.isKey('is_authenticated') === false) {
-                    console.log('!!!!');
-                }
-            }
         },
         mounted: function() {
             this.update();

@@ -6,7 +6,7 @@
             <div id="docCollapse" class="collapse">
                 <a class="nav-link mt-1" href="#" v-for="(index, value) in intList(0, newIssue)" :key="index" @click="jumpToOldRank(value)">第{{value}}期</a>
             </div>
-            <a class="nav-link" href="#">设置</a>
+            <a class="nav-link" href="#" @click="jumpToRecycleBin">回收站</a>
         </nav>
     </div>
 </template>
@@ -35,6 +35,11 @@
                         issue: this.newIssue,
                     }
                 });
+            },
+            jumpToRecycleBin: function () {
+                this.$router.push({
+                    name: 'recycleBin'
+                })
             },
             intList: function(start, end) {
                 let ans = [];

@@ -5,12 +5,9 @@
       <div class="col-2">
         <left></left>
       </div>
-      <div class="col-8">
+      <div class="col-10">
 <!--        <rank></rank>-->
         <router-view :to="{name: 'rank', params: {issue: this.newIssue}}"></router-view>
-      </div>
-      <div class="col-2 pr-0">
-
       </div>
     </div>
   </div>
@@ -20,14 +17,15 @@
 // import Rank from './views/Rank'
 import NavBar from './views/NavBar'
 import Left from './views/Left'
-
+import store from './plugins/store'
 export default {
-  name: 'App',
-  components: {
-    Left,
-    NavBar,
-    // Rank
-  }
+    name: 'App',
+    components: {
+        Left,
+        NavBar,
+        // Rank
+    },
+    store,
 }
 </script>
 

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Rank from "./views/Rank.vue"
+import RecycleBin from "@/views/RecycleBin";
 
 Vue.use(Router);
 
@@ -22,6 +23,11 @@ export default new Router({
                 referrer: "no-referrer",
             },
         },
+        {
+            path: '/recycle-bin',
+            name: 'recycleBin',
+            component: RecycleBin,
+        }
     // {
       // path: '/about',
       // name: 'about',
