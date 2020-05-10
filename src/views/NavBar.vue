@@ -47,21 +47,16 @@
         },
         mounted: function() {
             this.authenticate();
-            this.dataFileUrl = this.axios.defaults.baseURL + `video/issue/${this.$store.state.issue}/data.txt`;
         },
         methods: {
             download: function () {
-                // this.api.video.getDataFile(this.$store.state.issue)
-                //     .then(rep => rep.data)
-                //     .then(data => new Blob([data]))
-                //     .then(blob => URL.createObjectURL(blob))
-                //     .then(url => this.dataFileUrl = url);
+                this.dataFileUrl = this.axios.defaults.baseURL + `video/issue/${this.$store.state.issue}/data.txt`;
                 this.$refs.download.click();
             },
             authenticate: function () {
-                let is_authenticated = (this.inputAuthenticationPassword === this.authenticationPassword) || this.$cookies.get('is_authenticated');
+                let is_authenticated = this.inputAuthenticationPassword === this.authenticationPassword;
                 if (is_authenticated) {
-                    this.$store.commit('authenticate');
+                    this.$store.commit('authenticate', is_authenticated);
                 }
                 this.$cookies.set('is_authenticated', is_authenticated, '30d');
             },

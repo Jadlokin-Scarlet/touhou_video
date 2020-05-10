@@ -4,7 +4,7 @@ import Vue from 'vue';
 import axios from "axios";
 import api from "./api";
 
-Vue.prototype.newIssue = 3;
+// Vue.prototype.newIssue = 3;
 // Full config:  https://github.com/axios/axios#request-config
 axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || api.baseUrl;
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;

@@ -11,7 +11,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <input type="text" v-model="startTime">
+                        <input type="text" v-model="inputStartTime">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
@@ -20,19 +20,38 @@
                 </div>
             </div>
         </div>
+        <!-- Modal -->
+        <b-modal size="lg" id="videoPlayerModal" :title="videoPlayerData.name || ''">
+            <template class="container-fluid" v-slot:default="{}">
+                    <iframe class="justify-content-center" :src="'//player.bilibili.com/player.html?danmaku=0&high_quality=1&aid=' + videoPlayerData.av"
+                            allowfullscreen="allowfullscreen"
+                            width="768"
+                            height="512"
+                            sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts">
+                    </iframe>
+            </template>
+            <template v-slot:modal-footer="{}">
+                <span></span>
+            </template>
+        </b-modal>
         <div class="card text-left mt-3 col-10" v-for="(video,index) in videos" :key="index">
             <div class="row no-gutters">
                 <div class="col-1 align-self-center text-center">
                     <a class="display-4">{{video.rank}}</a>
                 </div>
                 <div class="col-3 border-left card-img-div">
-                    <a :href="'https://www.bilibili.com/video/av' + video.av" target="_blank">
+<!--                    <a :href="'https://www.bilibili.com/video/av' + video.av" target="_blank">-->
+                    <a @click="openVideoPlayerModal(video)">
                         <img :src="video.img" class="card-img" :alt="video.av">
                     </a>
                 </div>
                 <div class="col-7 border-right align-self-center">
                     <div class="card-body pb-0 pt-0">
-                        <h5 class="card-title m-1 ">{{video.name}}{{video.startTime | timeFilter}}</h5>
+                        <h5 class="card-title m-1 ">
+                            <a :href="'https://www.bilibili.com/video/av' + video.av" target="_blank">
+                                {{video.name}}{{video.startTime | timeFilter}}
+                            </a>
+                        </h5>
                         <hr class="m-1">
                         <div class="row ml-3">
                             <span class="oi oi-bar-chart mr-2" title="得分" aria-hidden="true"></span>
@@ -54,7 +73,7 @@
                     </div>
                 </div>
                 <div class="col-1 align-self-center text-center" v-show="state.is_authenticated">
-                    <button type="button" class="btn btn-outline-primary btn-sm mb-3" @click="openModal(video)" data-toggle="modal" data-target="#startTimeModal">设置选区</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mb-3" @click="openStartTimeModal(video)" data-toggle="modal" data-target="#startTimeModal">设置选区</button>
                     <br>
                     <button type="button" class="btn btn-outline-danger btn-sm" @click="deleteVideo(video.av)">删除</button>
                 </div>
@@ -72,9 +91,11 @@
         name: "Rank",
         data() {
             return {
-                issue: this.newIssue,
                 chooseVideo: 0,
-                startTime: 0,
+                inputStartTime: 0,
+                videoPlayerData: {},
+                event: "hidden.bs.modal",
+                event2: "click",
                 videos:[],
                 video: {
                     av: 53625263,
@@ -94,36 +115,41 @@
         },
         methods: {
             update: function() {
-                api.video.list(this.issue).then(rep => this.videos = rep.data)
+                api.video.listAllTypeTop30(this.state.issue).then(rep => this.videos = rep.data)
             },
             deleteVideo: function (av) {
                 api.video.delete(av).then(() => console.log("success to delete" + av));
                 this.update();
             },
             saveStartTime: function () {
-                api.video.setStartTime(this.chooseVideo, this.startTime).then(() => console.log("success to update startTime"));
+                api.video.info.setStartTime(this.chooseVideo, this.inputStartTime).then(() => console.log("success to update startTime"));
                 this.update();
             },
-            openModal: function (video) {
+            openStartTimeModal: function (video) {
                 this.chooseVideo = video.av;
-                this.startTime = video.startTime;
+                this.inputStartTime = video.startTime;
+            },
+            openVideoPlayerModal: function (video) {
+                this.videoPlayerData = video;
+                this.$bvModal.show("videoPlayerModal");
             },
         },
         mounted: function() {
             this.update();
-            this.is_authenticated = this.$cookies.get('is_authenticated');
         },
         watch: {
-            '$route' (to) {
-                this.issue = to.params.issue;
-            },
-            issue: function () {
+            'state.issue': function () {
                 this.update();
-            }
+            },
+            '$route': function () {
+                this.update();
+            },
+        },
+        update: function() {
+            this.update();
         },
         filters: {
             timeFilter: function (startTime) {
-                // startTime = parseInt(startTime);
                 return `(${startTime / 60 < 10 ? '0' : ''}${ Math.floor(startTime / 60)}:${startTime % 60 < 10 ? '0' : ''}${startTime % 60})`
             }
         }
@@ -134,6 +160,10 @@
     img{
         width: 250px;
         height: 161px;
+    }
+    a{
+        text-decoration:none;
+        color:#333;
     }
     .card-img-div{
         height: 161px;

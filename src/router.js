@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Rank from "./views/Rank.vue"
+import Home from "./views/Home.vue"
+import Admin from "./views/Admin"
+import Root from "./views/Root"
 import RecycleBin from "@/views/RecycleBin";
 
 Vue.use(Router);
@@ -8,26 +11,40 @@ Vue.use(Router);
 export default new Router({
     routes: [
         {
-            path: '/',
-            name: 'newRank',
-            component: Rank,
+            path: '/home',
+            name: 'home',
+            component: Home,
             meta: {
                 referrer: "no-referrer",
             },
         },
         {
-            path: '/rank/:issue',
-            name: 'rank',
-            component: Rank,
+            path: '/admin',
+            component: Admin,
             meta: {
                 referrer: "no-referrer",
             },
+            children: [
+                {
+                    path: '',
+                    name: 'rank',
+                    component: Rank,
+                    meta: {
+                        referrer: "no-referrer",
+                    },
+                },
+                {
+                    path: '/recycle-bin',
+                    name: 'recycleBin',
+                    component: RecycleBin,
+                },
+            ]
         },
         {
-            path: '/recycle-bin',
-            name: 'recycleBin',
-            component: RecycleBin,
-        }
+            path: "/",
+            name: "root",
+            component: Root,
+        },
     // {
       // path: '/about',
       // name: 'about',

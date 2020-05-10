@@ -1,31 +1,20 @@
 <template>
-  <div id="app" class="container-fluid">
-    <nav-bar></nav-bar>
-    <div class="row">
-      <div class="col-2">
-        <left></left>
-      </div>
-      <div class="col-10">
-<!--        <rank></rank>-->
-        <router-view :to="{name: 'rank', params: {issue: this.newIssue}}"></router-view>
-      </div>
+    <div id="app">
+        <router-view></router-view>
     </div>
-  </div>
 </template>
 
 <script>
-// import Rank from './views/Rank'
-import NavBar from './views/NavBar'
-import Left from './views/Left'
-import store from './plugins/store'
+import store from './store'
 export default {
     name: 'App',
-    components: {
-        Left,
-        NavBar,
-        // Rank
-    },
     store,
+    mounted: function() {
+        this.api.video.getNewIssue()
+            .then(rep => rep.data)
+            .then(newIssue => this.$store.commit('setNewIssue', newIssue));
+        this.$store.commit('authenticate', this.$cookies.get('is_authenticated'));
+    },
 }
 </script>
 
@@ -36,6 +25,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

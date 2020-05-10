@@ -3,23 +3,37 @@ export default {
     baseUrl: 'http://47.100.66.36:8081/api/',
     // baseUrl: 'http://localhost:8081/api/',
     video: {
-        list: function (issue) {
+        listAllTypeTop30: function (issue) {
             return Vue.axios.get(`/video/issue/${issue}`);
+        },
+        listAllTypeTop: function (issue, top) {
+            return Vue.axios.get(`/video/issue/${issue}/top/${top}`);
+        },
+        listTop: function (issue, top, type) {
+            return Vue.axios.get(`/video/issue/${issue}/top/${top}/type/${type}`);
         },
         delete: function(av) {
             return Vue.axios.delete("/video/"+av);
         },
-        setStartTime(av, startTime) {
-            return Vue.axios.patch(`/video/${av}/startTime/${startTime}`);
-        },
         getDataFile(issue) {
             return Vue.axios.get(`/video/issue/${issue}/data.txt`);
         },
-        getDeletedVideo() {
-            return Vue.axios.get(`/video/deleted`);
+        getNewIssue() {
+            return Vue.axios.get(`/video/issue`);
         },
-        recoveryVideo(av) {
-            return Vue.axios.post(`/video/deleted/${av}`);
+        info: {
+            listDeletedVideo() {
+                return Vue.axios.get(`/video/info/deleted`);
+            },
+            listRandom(type, number) {
+                return Vue.axios.get(`/video/info/type/${type}/random/${number}`);
+            },
+            recoveryVideo(av) {
+                return Vue.axios.post(`/video/info/deleted/${av}`);
+            },
+            setStartTime(av, startTime) {
+                return Vue.axios.patch(`/video/info/${av}/startTime/${startTime}`);
+            },
         }
     },
 };

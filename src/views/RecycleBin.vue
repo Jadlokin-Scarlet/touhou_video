@@ -38,12 +38,12 @@
         },
         methods: {
             updateDeletedVideo: function () {
-                this.api.video.getDeletedVideo()
+                this.api.video.info.listDeletedVideo()
                     .then(rep => rep.data)
                     .then(data => this.videos = data);
             },
             recoveryVideo: function (av) {
-                this.api.video.recoveryVideo(av)
+                this.api.video.info.recoveryVideo(av)
                     .then(() => this.updateDeletedVideo());
             }
         }
