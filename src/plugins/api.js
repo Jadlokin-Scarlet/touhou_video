@@ -1,7 +1,7 @@
 import Vue from 'vue'
 export default {
-    baseUrl: 'http://47.100.66.36:8081/api/',
-    // baseUrl: 'http://localhost:8081/api/',
+    // baseUrl: 'http://47.100.66.36:8081/api/',
+    baseUrl: 'http://localhost:8081/api/',
     video: {
         listAllTypeTop30: function (issue) {
             return Vue.axios.get(`/video/issue/${issue}`);

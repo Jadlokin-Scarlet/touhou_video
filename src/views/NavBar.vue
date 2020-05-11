@@ -22,7 +22,7 @@
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
             <div class="container">
-                <a class="navbar-brand" href="#">TouHouVideoRank</a>
+                <a class="navbar-brand" href="#" @click="jumpToHome">TouHouVideoRank</a>
                 <div class="justify-content-end" role="group">
                     <button class="btn btn-outline-success" type="button" v-show="state.is_authenticated" @click="download">
                         下载数据文本<a :href="dataFileUrl" download="data.txt" ref="download"></a>
@@ -60,6 +60,11 @@
                 }
                 this.$cookies.set('is_authenticated', is_authenticated, '30d');
             },
+            jumpToHome() {
+                this.$router.push({
+                    path: '/home',
+                });
+            }
         }
     }
 </script>

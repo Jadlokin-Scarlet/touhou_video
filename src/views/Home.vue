@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-2">
+            <div class="row mt-2" v-if="randomAllTypeVideoListList">
                 <div class="col-10">
                     <div class="row">
                         <h3 class="col-4 text-left">
@@ -46,6 +46,9 @@
                             <video-card :video="video"/>
                         </div>
                     </div>
+                </div>
+                <div class="col-2">
+                    <img class="img-fluid mt-4 border" src="../assets/东方Rank.png" @click="JumpToRank()">
                 </div>
             </div>
 
@@ -67,9 +70,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-2">
+                <div class="col-2 text-left">
+                    <h3>排行榜</h3>
                     <div class="row">
-                        <h3>排行榜</h3>
                         <p class="text-truncate rank-item" v-for="(video, jndex) in item.rank" :key="jndex" @click="JumpToBilibili(video.av)">
                             {{(jndex + 1) + ' ' + video.name}}
                         </p>
@@ -99,6 +102,9 @@
         }
         return this;
     };
+    Array.prototype.isNotEmpty = function () {
+        return this.length !== 0;
+    };
     export default {
         name: "Home",
         components: {VideoCard},
@@ -106,7 +112,7 @@
             return {
                 videoList: [],
                 state: this.$store.state,
-                titleList: ['all', '短片·手书·配音', '音Mad', '音乐综合'],
+                titleList: ['all', '动画', '音乐', '游戏', '鬼畜', '舞蹈', '生活'],
             }
         },
         mounted: function () {
@@ -131,6 +137,11 @@
             },
             JumpToBilibili(av) {
                 window.open(`https://www.bilibili.com/video/av${av}`);
+            },
+            JumpToRank() {
+                this.$router.push({
+                    path: '/',
+                });
             }
         },
         computed: {
@@ -149,12 +160,11 @@
                 return undefined;
             },
             randomOtherTypeVideoListList: function () {
-                return this.videoList
-                    .filter(item => item.title !=='all')
-                    .map(item => {
-                        let random = item.random.divide(4);
-                        return Object.assign({}, item, {random})
-                    });
+                return this.titleList
+                    .filter(title => title !=='all')
+                    .map(title => this.videoList.getByTitle(title))
+                    .filter(item => item !== undefined && item.random.isNotEmpty())
+                    .map(item => Object.assign({}, item, {random: item.random.divide(4)}));
             }
         }
     }
