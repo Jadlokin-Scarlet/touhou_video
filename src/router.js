@@ -1,15 +1,24 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Rank from "./views/Rank.vue"
-import Home from "./views/Home.vue"
-import Admin from "./views/Admin"
+import Rank from "./views/admin/Rank.vue"
+import Home from "./views/tilitili/Home.vue"
+import Admin from "./views/admin/Admin"
 import Root from "./views/Root"
-import RecycleBin from "@/views/RecycleBin";
+import RecycleBin from "@/views/admin/RecycleBin";
+import Search from "@/views/tilitili/Search";
 
 Vue.use(Router);
 
 export default new Router({
     routes: [
+        {
+            path: '/search/:searchKey',
+            name: 'search',
+            component: Search,
+            meta: {
+                referrer: "no-referrer",
+            },
+        },
         {
             path: '/home',
             name: 'home',
@@ -26,7 +35,7 @@ export default new Router({
             },
             children: [
                 {
-                    path: '',
+                    path: 'rank/:issue',
                     name: 'rank',
                     component: Rank,
                     meta: {
@@ -34,7 +43,7 @@ export default new Router({
                     },
                 },
                 {
-                    path: '/recycle-bin',
+                    path: 'recycle-bin',
                     name: 'recycleBin',
                     component: RecycleBin,
                 },

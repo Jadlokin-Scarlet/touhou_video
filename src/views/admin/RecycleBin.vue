@@ -11,11 +11,12 @@
                 <tbody v-if="videos.length > 0">
                     <tr v-for="(video, index) in videos" :key="index">
                         <td v-for="(head, index) in heads" :key="index">{{video[head]}}</td>
-                        <td class="but-td">
+                        <td class="but-td row">
                             <a :href="`https://www.bilibili.com/video/av${video.av}`" target="_blank">
                                 <button type="button" class="btn btn-outline-primary btn-sm">查看</button>
                             </a>
-                            <button type="button" class="btn btn-outline-primary btn-sm" @click="recoveryVideo(video.av)">恢复</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" @click="recoveryVideo(video.av)" v-if="isAuthenticated">恢复</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" @click="deleteVideo(video.av)" v-if="isAdmin">彻底删除</button>
                         </td>
                     </tr>
                 </tbody>
@@ -25,6 +26,8 @@
 </template>
 
 <script>
+    import {mapGetters} from "vuex";
+
     export default {
         name: "RecycleBin",
         data() {
@@ -45,7 +48,18 @@
             recoveryVideo: function (av) {
                 this.api.video.info.recoveryVideo(av)
                     .then(() => this.updateDeletedVideo());
+            },
+            deleteVideo: function (av) {
+                this.api.video.delete(av)
+                    .then(() => this.updateDeletedVideo());
             }
+        },
+        computed: {
+            ...mapGetters([
+                'isAuthenticated',
+                'isAdmin',
+                // ...
+            ])
         }
     }
 </script>

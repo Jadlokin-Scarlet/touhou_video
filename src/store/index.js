@@ -5,25 +5,33 @@ const newIssue = 2;
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-    newIssue: newIssue,
-    issue: newIssue,
-    is_authenticated: false,
-  },
-  mutations: {
-    authenticate (state, payload) {
-      this.state.is_authenticated = payload;
+    state: {
+        newIssue: newIssue,
+        is_authenticated: false,
+        authenticateKey: '',
     },
-    setNewIssue(state, payload) {
-      this.state.newIssue = payload;
-      this.state.issue = payload;
+    mutations: {
+        authenticateKey (state, payload) {
+            this.state.authenticateKey = payload;
+        },
+        setNewIssue(state, payload) {
+            this.state.newIssue = payload;
+        },
     },
-    setIssue(state, payload) {
-      this.state.issue = payload;
+    actions: {
     },
-  },
-  actions: {
-  },
-  modules: {
-  }
+    modules: {
+    },
+    getters: {
+        isNewIssueUpdated: state => new Promise(resolve => {
+            let stop = setInterval(() => {
+                if (state.newIssue !== 2) {
+                    clearInterval(stop);
+                    resolve(state.newIssue)
+                }
+            }, 100)
+        }),
+        isAuthenticated: state => ["thv", "tilitili"].indexOf(state.authenticateKey) !== -1,
+        isAdmin: state =>  state.authenticateKey === "tilitili",
+    }
 })

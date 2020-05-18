@@ -1,8 +1,6 @@
 <template>
     <div class="container-fluid">
-        <div class="row">
-            <img class="img-fluid" src="../assets/head.png" alt="head">
-        </div>
+        <nav-bar :show-search="true"/>
         <div class="container">
             <div class="row mt-2">
                 <div class="col-5">
@@ -28,52 +26,56 @@
                 <div class="col-7" v-if="newsVideoListList">
                     <div class="row" v-for="(list, index) in newsVideoListList" :key="index">
                         <div class="col-4" v-for="(newsVideo, jndex) in list" :key="jndex">
-                            <img class="img-fluid news-video-img" :src="newsVideo.img" :alt="newsVideo.name" @click="JumpToBilibili(newsVideo.av)">
+                            <img class="img-fluid news-video-img" :src="newsVideo.img" :alt="newsVideo.name" @click="jumpToBilibili(newsVideo.av)">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row mt-2" v-if="randomAllTypeVideoListList">
                 <div class="col-10">
-                    <div class="row">
-                        <h3 class="col-4 text-left">
+                    <div class="row justify-content-between">
+                        <h3 class="text-left">
                             <span class="oi oi-loop" title="随便看看" aria-hidden="true"></span>
                             随便看看
                         </h3>
+                        <h5 class="mr-4" @click="updateRandomVideoList('全部')">
+                            <span class="oi oi-loop-circular" title="随便看看" aria-hidden="true"></span>
+                            换一换
+                        </h5>
                     </div>
                     <div class="row">
                         <div class="col-3" v-for="(video, index) in randomAllTypeVideoListList" :key="index">
-                            <video-card :video="video"/>
+                            <video-card :video="video" @update="updateRandomVideo('全部', index)"/>
                         </div>
                     </div>
                 </div>
                 <div class="col-2">
-                    <img class="img-fluid mt-4 border" src="../assets/东方Rank.png" @click="JumpToRank()">
+                    <img class="img-fluid mt-4 border" src="../../assets/东方Rank.png" @click="jumpToRank()" alt="">
                 </div>
             </div>
 
             <div class="row mt-2" v-for="(item, index) in randomOtherTypeVideoListList" :key="index">
                 <div class="col-10">
                     <div class="row justify-content-between">
-                        <h3 class="col-4 text-left">
+                        <h3 class=" text-left">
                             <span class="oi oi-link-intact" :title="item.title" aria-hidden="true"></span>
                             {{item.title}}
                         </h3>
-                        <h5 class="col-2" @click="updateRandomVideoList(item.title)">
+                        <h5 class="mr-4" @click="updateRandomVideoList(item.title)">
                             <span class="oi oi-loop-circular" :title="item.title" aria-hidden="true"></span>
                             换一换
                         </h5>
                     </div>
                     <div class="row" v-for="(list, jndex) in item.random" :key="jndex">
                         <div class="col-3" v-for="(video, kndex) in list" :key="kndex">
-                            <video-card :video="video"/>
+                            <video-card :video="video" @update="updateRandomVideo(item.title, 4 * jndex + kndex)"/>
                         </div>
                     </div>
                 </div>
                 <div class="col-2 text-left">
                     <h3>排行榜</h3>
                     <div class="row">
-                        <p class="text-truncate rank-item" v-for="(video, jndex) in item.rank" :key="jndex" @click="JumpToBilibili(video.av)">
+                        <p class="text-truncate rank-item" v-for="(video, jndex) in item.rank" :key="jndex" @click="jumpToBilibili(video.av)">
                             {{(jndex + 1) + ' ' + video.name}}
                         </p>
                     </div>
@@ -85,6 +87,8 @@
 
 <script>
     import VideoCard from "@/components/VideoCard";
+    import NavBar from "@/views/tilitili/NavBar";
+    import {mapGetters} from "vuex";
     Array.prototype.getByTitle = function (title) {
         for (const item of this) {
             if (item.title === title) {
@@ -96,23 +100,17 @@
         const list = this.slice(0, length * 2);
         return [list.slice(0, length), list.slice(length)];
     };
-    Array.prototype.peek = function (fun) {
-        for (const item of this) {
-            fun(item);
-        }
-        return this;
-    };
     Array.prototype.isNotEmpty = function () {
         return this.length !== 0;
     };
     export default {
         name: "Home",
-        components: {VideoCard},
+        components: {NavBar, VideoCard},
         data() {
             return {
                 videoList: [],
                 state: this.$store.state,
-                titleList: ['all', '动画', '音乐', '游戏', '鬼畜', '舞蹈', '生活'],
+                titleList: ['全部', '动画', '音乐', '游戏', '鬼畜', '舞蹈', '生活'],
             }
         },
         mounted: function () {
@@ -124,8 +122,9 @@
             },
             updateVideoList() {
                 this.titleList.forEach(async title => {
+                    const newIssue = await this.isNewIssueUpdated;
                     let random = (await this.api.video.info.listRandom(title, 8)).data;
-                    const rank = await this.api.video.listTop(this.state.newIssue, 10, title).then(rep => rep.data);
+                    const rank = await this.api.video.listTop(newIssue, 10, title).then(rep => rep.data);
                     this.videoList.push(Object.assign({}, {title, random, rank}));
                 })
             },
@@ -135,25 +134,36 @@
                     .then(rep => rep.data)
                     .then(data => this.$set(obj, 'random', data))
             },
-            JumpToBilibili(av) {
+            updateRandomVideo(title, index) {
+                const obj = this.videoList.getByTitle(title);
+                this.api.video.info.listRandom(obj.title, 1)
+                    .then(rep => rep.data)
+                    .then(data => this.$set(obj.random, index, data[0]))
+            },
+            jumpToBilibili(av) {
                 window.open(`https://www.bilibili.com/video/av${av}`);
             },
-            JumpToRank() {
+            jumpToRank() {
                 this.$router.push({
-                    path: '/',
+                    path: '/admin',
                 });
-            }
+            },
         },
         computed: {
+            ...mapGetters([
+                'isAuthenticated',
+                'isAdmin',
+                'isNewIssueUpdated'
+            ]),
             newsVideoListList: function () {
-                const item = this.videoList.getByTitle('all');
+                const item = this.videoList.getByTitle('全部');
                 if (item && item.rank) {
                     return item.rank.divide(3);
                 }
                 return undefined;
             },
             randomAllTypeVideoListList: function() {
-                const item = this.videoList.getByTitle('all');
+                const item = this.videoList.getByTitle('全部');
                 if (item && item.random) {
                     return item.random.slice(0, 4);
                 }
@@ -161,12 +171,12 @@
             },
             randomOtherTypeVideoListList: function () {
                 return this.titleList
-                    .filter(title => title !=='all')
+                    .filter(title => title !=='全部')
                     .map(title => this.videoList.getByTitle(title))
                     .filter(item => item !== undefined && item.random.isNotEmpty())
                     .map(item => Object.assign({}, item, {random: item.random.divide(4)}));
             }
-        }
+        },
     }
 </script>
 

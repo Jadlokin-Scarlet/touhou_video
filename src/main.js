@@ -10,7 +10,7 @@ import store from './store'
 import router from './router'
 
 Vue.config.productionTip = false
-
+document.title = "TILITILI";
 new Vue({
   router,
   store,

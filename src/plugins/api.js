@@ -1,7 +1,7 @@
 import Vue from 'vue'
 export default {
-    // baseUrl: 'http://47.100.66.36:8081/api/',
-    baseUrl: 'http://localhost:8081/api/',
+    baseUrl: 'http://47.100.66.36:8081/api/',
+    // baseUrl: 'http://localhost:8081/api/',
     video: {
         listAllTypeTop30: function (issue) {
             return Vue.axios.get(`/video/issue/${issue}`);
@@ -12,8 +12,14 @@ export default {
         listTop: function (issue, top, type) {
             return Vue.axios.get(`/video/issue/${issue}/top/${top}/type/${type}`);
         },
+        search: function (issue, top, type, searchKey, sortKey) {
+            return Vue.axios.get(`/video/issue/${issue}/type/${type}`, {params: {top, searchKey, sortKey}});
+        },
+        falseDelete: function(av) {
+            return Vue.axios.delete(`/video/${av}/isDelete/true`);
+        },
         delete: function(av) {
-            return Vue.axios.delete("/video/"+av);
+            return Vue.axios.delete(`/video/${av}`)
         },
         getDataFile(issue) {
             return Vue.axios.get(`/video/issue/${issue}/data.txt`);

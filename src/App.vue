@@ -13,7 +13,7 @@ export default {
         this.api.video.getNewIssue()
             .then(rep => rep.data)
             .then(newIssue => this.$store.commit('setNewIssue', newIssue));
-        this.$store.commit('authenticate', this.$cookies.get('is_authenticated'));
+        this.$store.commit('authenticateKey', this.$cookies.get('authenticateKey'));
     },
 }
 </script>

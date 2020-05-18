@@ -3,12 +3,22 @@
 </template>
 
 <script>
+    import {mapGetters} from "vuex";
+
     export default {
         name: "Root",
-        mounted: function () {
-            this.$router.push({
-                path: '/admin',
+        mounted: async function () {
+            const newIssue = await this.isNewIssueUpdated;
+            await this.$router.push({
+                path: '/admin/rank/' + newIssue,
             });
+        },
+        computed: {
+            ...mapGetters([
+                'isAuthenticated',
+                'isAdmin',
+                'isNewIssueUpdated',
+            ])
         }
     }
 </script>

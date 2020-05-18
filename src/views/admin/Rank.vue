@@ -72,7 +72,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-1 align-self-center text-center" v-show="state.is_authenticated">
+                <div class="col-1 align-self-center text-center" v-show="isAuthenticated">
                     <button type="button" class="btn btn-outline-primary btn-sm mb-3" @click="openStartTimeModal(video)" data-toggle="modal" data-target="#startTimeModal">设置选区</button>
                     <br>
                     <button type="button" class="btn btn-outline-danger btn-sm" @click="deleteVideo(video.av)">删除</button>
@@ -86,7 +86,8 @@
 </template>
 
 <script>
-    import api from '../plugins/api.js'
+    import api from '../../plugins/api.js'
+    import {mapGetters} from "vuex";
     export default {
         name: "Rank",
         data() {
@@ -110,15 +111,15 @@
                     point: 2,
                     startTime: 0,
                 },
-                state: this.$store.state
+                state: this.$store.state,
             }
         },
         methods: {
             update: function() {
-                api.video.listAllTypeTop30(this.state.issue).then(rep => this.videos = rep.data)
+                api.video.listAllTypeTop30(this.$route.params.issue).then(rep => this.videos = rep.data)
             },
             deleteVideo: function (av) {
-                api.video.delete(av).then(() => console.log("success to delete" + av));
+                api.video.falseDelete(av).then(() => console.log("success to delete" + av));
                 this.update();
             },
             saveStartTime: function () {
@@ -152,6 +153,12 @@
             timeFilter: function (startTime) {
                 return `(${startTime / 60 < 10 ? '0' : ''}${ Math.floor(startTime / 60)}:${startTime % 60 < 10 ? '0' : ''}${startTime % 60})`
             }
+        },
+        computed: {
+            ...mapGetters([
+                'isAuthenticated',
+                'isAdmin',
+            ])
         }
     }
 </script>
