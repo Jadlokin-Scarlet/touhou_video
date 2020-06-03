@@ -19,7 +19,7 @@
                             往期
                         </a>
                         <div class="dropdown-menu min-width-none" aria-labelledby="navbarDropdown">
-                            <router-link :to="`/admin/rank/${value}`" class="nav-link mt-1 font-size-13" href="#" v-for="(value, index) in range(state.newIssue)" :key="index">第{{value}}期</router-link>
+                            <router-link :to="`/admin/rank/${value}`" class="nav-link mt-1 font-size-20" href="#" v-for="(value, index) in range(state.newIssue)" :key="index">第{{value}}期</router-link>
                         </div>
                     </li>
                     <li class="nav-item">
@@ -27,8 +27,10 @@
                     </li>
                 </ul>
                 <div class="row" v-show="showSearch">
-                    <input class="col-8 form-control mr-1 search-input" type="search" v-model="searchKey" :placeholder="top1Video | get('name')" aria-label="Search">
-                    <button class="col-3 btn btn-outline-success" type="submit" @click="search">搜索</button>
+                    <input class="col-8 form-control mr-1 search-input"
+                           v-model="searchKey" :placeholder="top1Video | get('name')"
+                            @keypress.enter="search">
+                    <button class="col-3 btn btn-outline-success" @click="search">搜索</button>
                 </div>
             </div>
         </nav>
@@ -91,11 +93,5 @@
     }
     .search-input {
         width: 500px;
-    }
-    .font-size-13 {
-        font-size: 13px;
-    }
-    .min-width-none {
-        min-width: auto;
     }
 </style>

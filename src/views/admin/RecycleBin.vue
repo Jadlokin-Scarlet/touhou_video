@@ -10,13 +10,13 @@
                 </thead>
                 <tbody v-if="videos.length > 0">
                     <tr v-for="(video, index) in videos" :key="index">
-                        <td v-for="(head, index) in heads" :key="index">{{video[head]}}</td>
+                        <td v-for="(head, index) in heads" :key="index">{{video[head] | dateFomatter(head)}}</td>
                         <td class="but-td row">
                             <a :href="`https://www.bilibili.com/video/av${video.av}`" target="_blank">
-                                <button type="button" class="btn btn-outline-primary btn-sm">查看</button>
+                                <button type="button" class="btn btn-outline-warning btn-sm">查看</button>
                             </a>
-                            <button type="button" class="btn btn-outline-primary btn-sm" @click="recoveryVideo(video.av)" v-if="isAuthenticated">恢复</button>
-                            <button type="button" class="btn btn-outline-primary btn-sm" @click="deleteVideo(video.av)" v-if="isAdmin">彻底删除</button>
+                            <button type="button" class="btn btn-outline-warning btn-sm" @click="recoveryVideo(video.av)" v-if="isAuthenticated">恢复</button>
+                            <button type="button" class="btn btn-outline-warning btn-sm" @click="deleteVideo(video.av)" v-if="isAdmin">彻底删除</button>
                         </td>
                     </tr>
                 </tbody>
@@ -41,7 +41,7 @@
         },
         methods: {
             updateDeletedVideo: function () {
-                this.api.video.info.listDeletedVideo()
+                this.api.video.listDeletedVideo()
                     .then(rep => rep.data)
                     .then(data => this.videos = data);
             },
@@ -60,6 +60,14 @@
                 'isAdmin',
                 // ...
             ])
+        },
+        filters: {
+            dateFomatter: function (value, head) {
+                if (head === "pubTime") {
+                    return value.split(" ")[0];
+                }
+                return value;
+            }
         }
     }
 </script>

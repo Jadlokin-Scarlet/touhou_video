@@ -8,6 +8,10 @@ export default function Video() {
         copyright: false,
         pubTime: '',
         startTime: 0,
-        bv: ''
+        bv: '',
+
+        like: 0,
+        dislike: 0,
+        share: 0,
     })
 }

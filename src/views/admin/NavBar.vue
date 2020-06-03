@@ -15,7 +15,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="authenticate">确定</button>
+                        <button type="button" class="btn btn-warning" data-dismiss="modal" @click="authenticate">确定</button>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             往期
                         </a>
-                        <div class="dropdown-menu min-width-none" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-menu " aria-labelledby="navbarDropdown">
                             <router-link :to="`/admin/rank/${value}`" class="nav-link mt-1 font-size-13" href="#" v-for="(value, index) in range(state.newIssue)" :key="index">第{{value}}期</router-link>
                         </div>
                     </li>

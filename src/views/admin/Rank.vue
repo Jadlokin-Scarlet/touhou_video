@@ -15,7 +15,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="saveStartTime">确定</button>
+                        <button type="button" class="btn btn-warning" data-dismiss="modal" @click="saveStartTime">确定</button>
                     </div>
                 </div>
             </div>
@@ -34,53 +34,70 @@
                 <span></span>
             </template>
         </b-modal>
-        <div class="card text-left mt-3 col-10" v-for="(video,index) in videos" :key="index">
-            <div class="row no-gutters">
-                <div class="col-1 align-self-center text-center">
-                    <a class="display-4">{{video.rank}}</a>
-                </div>
-                <div class="col-3 border-left card-img-div">
-<!--                    <a :href="'https://www.bilibili.com/video/av' + video.av" target="_blank">-->
-                    <a @click="openVideoPlayerModal(video)">
-                        <img :src="video.img" class="card-img" :alt="video.av">
-                    </a>
-                </div>
-                <div class="col-7 border-right align-self-center">
-                    <div class="card-body pb-0 pt-0">
-                        <h5 class="card-title m-1 ">
-                            <a :href="'https://www.bilibili.com/video/av' + video.av" target="_blank">
-                                {{video.name}}{{video.startTime | timeFilter}}
-                            </a>
-                        </h5>
-                        <hr class="m-1">
-                        <div class="row ml-3">
-                            <span class="oi oi-bar-chart mr-2" title="得分" aria-hidden="true"></span>
-                            <a class="mr-4">{{video.point}}</a>
-                            <span class="oi oi-play-circle mr-2" title="播放量" aria-hidden="true"></span>
-                            <a class="mr-4">{{video.view}}</a>
-                            <span class="oi oi-comment-square mr-2" title="评论" aria-hidden="true"></span>
-                            <a class="mr-4">{{video.reply}}</a>
-                            <span class="oi oi-star mr-2" title="收藏" aria-hidden="true"></span>
-                            <a class="mr-4">{{video.favorite}}</a>
-                            <span class="oi oi-aperture mr-2" title="硬币" aria-hidden="true"></span>
-                            <a class="mr-4">{{video.favorite}}</a>
+        <div class="row" v-if="videos | videos.length >= pageSize">
+            <div class="col-10">
+                <div class="card text-left mt-3" v-for="(video,index) in videos.slice(0, pageSize)" :key="index">
+                    <div class="row no-gutters">
+                        <div class="col-1 align-self-center text-center">
+                            <a :class="index + 1 < 100? 'display-4': 'h1'">{{index  + 1}}</a>
                         </div>
-                        <div class="ml-2 mt-2">
-<!--                            <div class="btn-group tags" role="group">-->
-                            <a class="border p-1 tag mr-2" v-for="(tag, index) in video.tags" :key="index">{{tag}}</a>
-<!--                            </div>-->
+                        <div class="col-3 border-left card-img-div">
+                            <!--                    <a :href="'https://www.bilibili.com/video/av' + video.av" target="_blank">-->
+                            <a @click="openVideoPlayerModal(video)">
+                                <img :src="video.img" class="card-img" :alt="video.av">
+                            </a>
+                        </div>
+                        <div class="col-7 border-right align-self-center">
+                            <div class="card-body pb-0 pt-0">
+                                <h5 class="card-title m-1 ">
+                                    <a :href="'https://www.bilibili.com/video/av' + video.av" target="_blank">
+                                        {{video.name}}{{video.startTime | timeFilter}}
+                                    </a>
+                                </h5>
+                                <hr class="m-1">
+                                <div class="row ml-3">
+                                    <span class="oi oi-bar-chart mr-2" title="得分" aria-hidden="true"></span>
+                                    <a class="mr-4">{{video.point}}</a>
+                                    <span class="oi oi-play-circle mr-2" title="播放量" aria-hidden="true"></span>
+                                    <a class="mr-4">{{video.view}}</a>
+                                    <span class="oi oi-comment-square mr-2" title="评论" aria-hidden="true"></span>
+                                    <a class="mr-4">{{video.reply}}</a>
+                                    <span class="oi oi-star mr-2" title="收藏" aria-hidden="true"></span>
+                                    <a class="mr-4">{{video.favorite}}</a>
+                                    <span class="oi oi-aperture mr-2" title="硬币" aria-hidden="true"></span>
+                                    <a class="mr-4">{{video.favorite}}</a>
+                                </div>
+                                <div class="ml-2 mt-2">
+                                    <!--                            <div class="btn-group tags" role="group">-->
+                                    <a class="border p-1 tag mr-2" v-for="(tag, index) in video.tags" :key="index">{{tag}}</a>
+                                    <!--                            </div>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1 align-self-center text-center" v-show="isAuthenticated">
+                            <button type="button" class="btn btn-outline-warning btn-sm mb-3" @click="openStartTimeModal(video)" data-toggle="modal" data-target="#startTimeModal">设置选区</button>
+                            <br>
+                            <button type="button" class="btn btn-outline-primary btn-sm" @click="deleteVideo(video.av)">删除</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-1 align-self-center text-center" v-show="isAuthenticated">
-                    <button type="button" class="btn btn-outline-primary btn-sm mb-3" @click="openStartTimeModal(video)" data-toggle="modal" data-target="#startTimeModal">设置选区</button>
-                    <br>
-                    <button type="button" class="btn btn-outline-danger btn-sm" @click="deleteVideo(video.av)">删除</button>
+            </div>
+            <div class="col-2" v-if="videos.isNotEmpty()">
+                <div class="form-check mt-3">
+                    <input class="form-check-input" v-model="isShowMoreVideo" type="checkbox" value="" id="defaultCheck1">
+                    <label class="form-check-label" for="defaultCheck1">
+                        <a class="text-justify font-size-15">
+                            让我康康!(指视频摩多)
+                        </a>
+                    </label>
                 </div>
             </div>
         </div>
-        <div class="col-2">
-
+        <div class="row justify-content-md-center mt-3" v-else>
+            <h5 class="col-12">Tip: 每天第一次加载请稍等</h5>
+            <div class="spinner-border text-warning" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
         </div>
     </div>
 </template>
@@ -88,16 +105,19 @@
 <script>
     import api from '../../plugins/api.js'
     import {mapGetters} from "vuex";
+
     export default {
         name: "Rank",
         data() {
             return {
                 chooseVideo: 0,
                 inputStartTime: 0,
+                isShowMoreVideo: JSON.parse(this.$cookies.get('isShowMoreVideo')),
                 videoPlayerData: {},
+                videos:[],
+                state: this.$store.state,
                 event: "hidden.bs.modal",
                 event2: "click",
-                videos:[],
                 video: {
                     av: 53625263,
                     rank: 30,
@@ -111,12 +131,13 @@
                     point: 2,
                     startTime: 0,
                 },
-                state: this.$store.state,
             }
         },
         methods: {
             update: function() {
-                api.video.listAllTypeTop30(this.$route.params.issue).then(rep => this.videos = rep.data)
+                this.videos.splice(0, this.videos.length);
+                const top = this.isShowMoreVideo? 100: 30;
+                api.video.listAllTypeTop(this.$route.params.issue, top).then(rep => this.videos = rep.data)
             },
             deleteVideo: function (av) {
                 api.video.falseDelete(av).then(() => console.log("success to delete" + av));
@@ -145,6 +166,13 @@
             '$route': function () {
                 this.update();
             },
+            'isShowMoreVideo': function (isShowMoreVideo) {
+                this.pageSize = isShowMoreVideo? 100: 30;
+                this.$cookies.set('isShowMoreVideo', isShowMoreVideo, '30d');
+                if (this.videos.length < this.pageSize) {
+                    this.update();
+                }
+            },
         },
         update: function() {
             this.update();
@@ -152,9 +180,12 @@
         filters: {
             timeFilter: function (startTime) {
                 return `(${startTime / 60 < 10 ? '0' : ''}${ Math.floor(startTime / 60)}:${startTime % 60 < 10 ? '0' : ''}${startTime % 60})`
-            }
+            },
         },
         computed: {
+            pageSize: function () {
+                return this.isShowMoreVideo ? 100 : 30;
+            },
             ...mapGetters([
                 'isAuthenticated',
                 'isAdmin',

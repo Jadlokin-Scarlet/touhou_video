@@ -1,7 +1,9 @@
 <template>
     <div class="font-size-13 text-left border mt-4" @mouseover="showDelete" @mouseout="hideDelete" v-if="video">
         <div class="position-relative">
-            <img class="img-fluid height-120px" width="200px" :src="video.img" :alt="video.name" @click="JumpToBilibili(video.av)"/>
+            <router-link :to="`/player/av/${video.av}`">
+                <img class="img-fluid height-120px" width="200px" :src="video.img" :alt="video.name"/>
+            </router-link>
             <div class="video-card-delete" v-if="isAuthenticated" v-show="isShowDelete" @click="deleteVideo">
                 <a>x</a>
             </div>
@@ -63,14 +65,5 @@
         position: absolute;
         top: 0;
         right: 0;
-    }
-    .max-width-200 {
-        max-width: 200px;
-    }
-    .height-40px {
-        height: 40px;
-    }
-    .height-120px {
-        height: 120px;
     }
 </style>

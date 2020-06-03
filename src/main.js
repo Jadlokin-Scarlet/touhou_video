@@ -9,6 +9,7 @@ import 'bootstrap';
 import store from './store'
 import router from './router'
 
+import './assets/styles/main.css';
 Vue.config.productionTip = false
 document.title = "TILITILI";
 new Vue({

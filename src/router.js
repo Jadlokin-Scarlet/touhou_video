@@ -6,11 +6,20 @@ import Admin from "./views/admin/Admin"
 import Root from "./views/Root"
 import RecycleBin from "@/views/admin/RecycleBin";
 import Search from "@/views/tilitili/Search";
+import Player from "@/views/tilitili/Player";
 
 Vue.use(Router);
 
 export default new Router({
     routes: [
+        {
+            path: '/player/av/:av',
+            name: 'player',
+            component: Player,
+            meta: {
+                referrer: "no-referrer",
+            },
+        },
         {
             path: '/search/:searchKey',
             name: 'search',

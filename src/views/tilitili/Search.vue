@@ -133,9 +133,5 @@
     .search-input {
         width: 330px;
         font-size: 16px;
-        /*height: 45px;*/
-    }
-    .font-size-13 {
-        font-size: 13px;
     }
 </style>
