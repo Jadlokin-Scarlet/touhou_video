@@ -41,7 +41,7 @@
         },
         methods: {
             updateDeletedVideo: function () {
-                this.api.video.listDeletedVideo()
+                this.api.video.info.listDeletedVideo()
                     .then(rep => rep.data)
                     .then(data => this.videos = data);
             },

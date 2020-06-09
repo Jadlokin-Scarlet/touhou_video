@@ -5,7 +5,7 @@
             <div class="row justify-content-between">
                 <div class="col-8">
                     <div class="row">
-                        <a class="font-size-20">{{video.name}}</a>
+                        <a class="font-size-20 text-left">{{video.name}}</a>
                     </div>
                     <div class="row mt-2">
                         <a class="font-size-10 text-black-50"> > {{video.type}}</a>
@@ -22,17 +22,17 @@
                                 sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts">
                         </iframe>
                     </div>
-                    <div class="row mt-2 font-size-20 mb-2 pb-2 border-bottom">
-                        <a class="col-auto mr-1 pl-0 text-black-50"><span class="oi oi-thumb-up"></span> {{video.like}}</a>
-                        <a class="col-auto mr-1 text-black-50"><span class="oi oi-thumb-down"></span> {{video.dislike}}</a>
-                        <a class="col-auto mr-1 text-black-50"><span class="oi oi-star"></span> {{video.favorite}}</a>
-                        <a class="col-auto mr-1 text-black-50"><span class="oi oi-share"></span> {{video.share}}</a>
+                    <div class="row mt-2 font-size-15 mb-2 pb-2 border-bottom">
+                        <a class="col-auto mr-1 pl-0 text-black-50"><span class="oi oi-thumb-up"></span> {{video.like | nullNumber}}</a>
+                        <a class="col-auto mr-1 text-black-50"><span class="oi oi-thumb-down"></span> {{video.dislike | nullNumber}}</a>
+                        <a class="col-auto mr-1 text-black-50"><span class="oi oi-star"></span> {{video.favorite | nullNumber}}</a>
+                        <a class="col-auto mr-1 text-black-50"><span class="oi oi-share"></span> {{video.share | nullNumber}}</a>
                     </div>
-                    <div class="row mt-3 font-size-10">
+                    <div class="row mt-3 font-size-10 text-left" style="white-space: pre-line">
                         <a>{{video.description}}</a>
                     </div>
-                    <div class="row mt-3 pb-2 border-bottom">
-                        <a class="border pr-2 pl-2 mr-2 font-size-12 rounded-pill bg-grey" v-for="(tag, index) in video.tags" :key="index">{{tag}}</a>
+                    <div class="row mt-2 pb-2 border-bottom">
+                        <a class="border mt-1 pr-2 pl-2 mr-2 font-size-12 rounded-pill bg-grey" v-for="(tag, index) in video.tags" :key="index">{{tag}}</a>
                     </div>
                     <div class="mt-2 ">
                         <a class="row font-size-20">{{video.reply}}  评论</a>
@@ -97,6 +97,11 @@
                 'isNewIssueUpdated'
             ]),
         },
+        filters: {
+            nullNumber: function (number) {
+                return number === undefined || number === null? "-": number;
+            }
+        }
     }
 </script>
 
