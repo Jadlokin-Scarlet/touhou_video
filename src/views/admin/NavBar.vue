@@ -47,9 +47,9 @@
                     </li>
                 </ul>
                 <div class="justify-content-end" role="group">
-                    <button class="btn btn-outline-success" type="button" v-show="isAuthenticated" @click="download">
-                        下载数据文本<a :href="dataFileUrl" download="data.txt" ref="download"></a>
-                    </button>
+<!--                    <button class="btn btn-outline-success" type="button" v-show="isAuthenticated" @click="download">-->
+<!--                        下载数据文本<a :href="dataFileUrl" download="data.txt" ref="download"></a>-->
+<!--                    </button>-->
                     <button class="btn btn-outline-success ml-1" type="button" data-toggle="modal" data-target="#authenticationModal">管理员认证</button>
                 </div>
             </div>
