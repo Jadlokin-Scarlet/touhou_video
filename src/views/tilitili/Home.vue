@@ -26,7 +26,9 @@
                 <div class="col-7" v-if="newsVideoListList">
                     <div class="row" v-for="(list, index) in newsVideoListList" :key="index">
                         <div class="col-4" v-for="(newsVideo, jndex) in list" :key="jndex">
-                            <img class="img-fluid news-video-img" :src="newsVideo.img" :alt="newsVideo.name" @click="jumpToBilibili(newsVideo.av)">
+                            <router-link :to="`/player/av/${video.av}`">
+                                <img class="img-fluid news-video-img" :src="newsVideo.img" :alt="newsVideo.name">
+                            </router-link>
                         </div>
                     </div>
                 </div>
@@ -75,9 +77,11 @@
                 <div class="col-2 text-left">
                     <h3>排行榜</h3>
                     <div class="row">
-                        <p class="text-truncate rank-item" v-for="(video, jndex) in item.rank" :key="jndex" @click="jumpToBilibili(video.av)">
-                            {{(jndex + 1) + ' ' + video.name}}
-                        </p>
+                        <router-link :to="`/player/av/${video.av}`">
+                            <p class="text-truncate rank-item" v-for="(video, jndex) in item.rank" :key="jndex" @click="jumpToBilibili(video.av)">
+                                {{(jndex + 1) + ' ' + video.name}}
+                            </p>
+                        </router-link>
                     </div>
                 </div>
             </div>
